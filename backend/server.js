@@ -1,34 +1,29 @@
 // Import necessary modules
-const express = require('express');
-const mysql = require('mysql');
+const express = require("express");
+const mysql = require("mysql");
+const connectDB = require("./db");
+const cors = require("cors")
+const morgan = require("morgan")
 
-// Create an instance of Express
 const app = express();
-const port = 5173; // Choose a port for your backend server
+app.use(cors())
+app.use(morgan("dev"))
+const port = process.env.PORT || 3000;
 
-// Create a MySQL connection pool
-const pool = mysql.createPool({
-  host: 'your_mysql_host',
-  user: 'your_mysql_user',
-  password: 'your_mysql_password',
-  database: 'your_mysql_database'
+const db = connectDB();
+
+app.get("/recycle_centers", async (req, res) => {
+  const query = "SELECT * FROM recycling_centers";
+  try {
+    const [rows, fields] = await (await db).query(query);
+    console.log(rows);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching recycling centers:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
-app.get('/recycle_centers', (req, res) => {
-  // Query database for recycling center data
-  pool.query('SELECT * FROM recycling_centers', (error, results) => {
-    if (error) {
-      console.error('Error fetching data:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      // Send recycling center data as JSON response
-      res.json(results);
-    }
-  });
-});
-
-
-// Start the Express server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

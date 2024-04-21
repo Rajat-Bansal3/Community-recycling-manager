@@ -1,62 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './RecycleCenters.css';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import "./RecycleCenters.css";
 
 const RecycleCenters = () => {
   const [centers, setCenters] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [centersPerPage] = useState(10);
 
-  // Fetch recycling center data from MySQL database
+  const fetchCenters = async () => {
+    try {
+      const res = await axios.get("http://localhost:4040/recycle_centers");
+      setCenters(res.data);
+    } catch (error) {
+      console.error("Error fetching recycling centers:", error); // Log any errors that occur during fetching
+    }
+  };
+
   useEffect(() => {
-    axios.get('http://localhost:5173/Recycle_Centers')
-      .then(response => {
-        console.log('Data from backend:', response.data);
-        setCenters(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+    fetchCenters();
   }, []);
-  
+
+  // Get current centers
+  const indexOfLastCenter = currentPage * centersPerPage;
+  const indexOfFirstDonor = indexOfLastCenter - centersPerPage;
+  const currentCenters = centers?.slice(indexOfFirstDonor, indexOfLastCenter);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className='list'>
-      <h1>Recycling Centers</h1>
-      <div className="center-table">
-        <table className='table'>
+      <h2 className=''>List of Centers</h2>
+      <div className='table'>
+        <table className='center-table'>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Address</th>
-              <th>City</th>
-              <th>State</th>
-              <th>ZIP Code</th>
-              <th>Phone Number</th>
-              <th>Email</th>
-              <th>Website</th>
+              <th className=''>Name</th>
+              <th className=''>Address</th>
+              <th className=''>City</th>
+              <th className=''>State</th>
+              <th className=''>ZIP Code</th>
+              <th className=''>Phone Number</th>
+              <th className=''>Email</th>
+              <th className=''>Website</th>
             </tr>
           </thead>
           <tbody>
-            {console.log(centers)}
-            {Array.isArray(centers) && centers.length > 0 ? (
-  centers.map(center => (
-    <tr key={center.id}>
-      <td>{center.name}</td>
-      <td>{center.address}</td>
-      <td>{center.city}</td>
-      <td>{center.state}</td>
-      <td>{center.zipCode}</td>
-      <td>{center.phoneNumber}</td>
-      <td>{center.email}</td>
-      <td>{center.website}</td>
-    </tr>
-  ))
-) : (
-  <tr>
-    <td colSpan="8">Loading...</td>
-  </tr>
-)}
+            {currentCenters?.map((center, index) => (
+              <tr key={index} className={index % 2 === 0 ? "bg-gray-100" : ""}>
+                <td className=''>{center.name}</td>
+                <td className=''>{center.address}</td>
+                <td className=''>{center.city}</td>
+                <td className=''>{center.state}</td>
+                <td className=''>{center.zip_code}</td>
+                <td className=''>{center.phone_number}</td>
+                <td className=''>{center.email}</td>
+                <td className=''>{center.website}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
+        <div className='center'>
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className=''
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentCenters?.length < centersPerPage}
+            className=''
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
