@@ -1,0 +1,51 @@
+.list {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(rgba(8, 0, 58, 0.7), rgba(8, 0, 58, 0.7)), url('../../assets/background.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    padding: 50px; /* Adjust padding as needed */
+  }
+  
+  .list h1 {
+    position: absolute;
+    margin: 20px;
+    padding-bottom: 20%;
+    z-index: 1; /* Ensure h1 stays above background */
+  }
+
+  .center-table{
+    display: inline-block;
+    list-style: none;
+    margin: 5px 50px;
+    
+    font-size: 20px;
+  }
+
+  .center-table th{
+    padding: 50px;
+  }
+
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .table th,
+  .table td {
+    
+    border: 1px solid #214212;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  .table th {
+    background-color: #09a116;
+    padding: 20px;
+  }
+  

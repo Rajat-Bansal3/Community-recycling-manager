@@ -1,0 +1,40 @@
+.materials{
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(rgba(8,0,58,0.7),rgba(8,0,58,0.7)), url('../../assets/background.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    padding: 200px;
+    width: 100%;
+    z-index: 10;
+
+}
+.material img{
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+
+}
+.material{
+    flex-basis: 31%;
+    margin: 10px;
+}
+.caption{
+    border-radius: 50px;
+    position: absolute;
+    padding-top: 20px;
+    padding-left: 130px;
+
+}
+.materials h2{
+    position: fixed;
+    margin: 20px;
+    padding-bottom: 20%;
+    
+
+}
